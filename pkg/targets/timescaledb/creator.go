@@ -187,7 +187,7 @@ func (d *dbCreator) createTableAndIndexes(dbBench *sql.DB, tableName string, fie
 	if d.opts.TimePartitionIndex {
 		MustExec(dbBench, fmt.Sprintf("CREATE INDEX ON %s(\"time\" DESC, %s)", tableName, partitionColumn))
 	} else if d.opts.TimeIndex {
-		MustExec(dbBench, fmt.Sprintf("CREATE INDEX ON %s(\"time\" DESC)", tableName))
+		//MustExec(dbBench, fmt.Sprintf("CREATE INDEX ON %s(\"time\" DESC)", tableName))
 	}
 
 	for _, indexDef := range indexDefs {
@@ -222,8 +222,8 @@ func (d *dbCreator) createTableAndIndexes(dbBench *sql.DB, tableName string, fie
 		}
 
 		MustExec(dbBench,
-			fmt.Sprintf("SELECT %s('%s'::regclass, 'time'::name, %s, chunk_time_interval => %d, create_default_indexes=>FALSE)",
-				creationCommand, tableName, partitionsOption, d.opts.ChunkTime.Nanoseconds()/1000))
+			fmt.Sprintf("SELECT %s('%s'::regclass, 'time'::name, chunk_time_interval => %d, create_default_indexes=>FALSE)",
+				creationCommand, tableName, d.opts.ChunkTime.Nanoseconds()/1000))
 	}
 }
 
