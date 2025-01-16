@@ -134,6 +134,18 @@ func (d *dbCreator) createMetricsTable(table *tableDef) error {
 	if err != nil {
 		return err
 	}
+	sql2 := fmt.Sprintf(`ALTER TABLE cpu SET (refresh_interval = 5000)`)
+	sql3 := fmt.Sprintf(`Alter table cpu set ("translog.durability" = 'ASYNC')`)
+       _, err := d.conn.Exec(context.Background(), sql2)
+	if err != nil {
+		return err
+	}
+	_, err := d.conn.Exec(context.Background(), sql3)
+	if err != nil {
+		return err
+	}
+
+	
 	return nil
 }
 
